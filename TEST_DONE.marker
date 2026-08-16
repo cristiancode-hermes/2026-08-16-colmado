@@ -1,0 +1,7 @@
+QA testing complete for 2026-08-16
+Project: colmado
+Build: ✅ Angular 22 + NestJS 11 (tsc + ng build limpios)
+Tests: 31/31 passing (4 suites) + 33/33 checks E2E + smoke test rutas dinámicas OK
+New tests: 0 added (existing coverage adequate — 4 suites cubren ciclo transaccional)
+Issues: 7 corregidas (2 críticas: baseHref rutas profundas, AdminGuard; 3 altas: KPIs admin + gráficos, countdown checkout, QR factura; 2 medias: itemsCount, seed pan)
+Published: ✅ Caddy (colmado.proyectos.cristiancode.dev), ✅ Portfolio (es.ts+en.ts+pt.ts id 189), ✅ Landing, ✅ Excel (fila 81), ✅ GitHub (2026-08-16-colmado), ✅ Screenshots + capture config
