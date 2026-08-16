@@ -59,7 +59,7 @@ import { centsToEur, CheckoutResult } from '../models';
               <label for="addr">Dirección</label>
               <input id="addr" class="input" name="shippingAddress" [(ngModel)]="form.shippingAddress" required placeholder="Calle del Sol 12, 3ºB" />
             </div>
-            <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px">
+            <div class="grid-2-1">
               <div class="field">
                 <label for="city">Ciudad</label>
                 <input id="city" class="input" name="shippingCity" [(ngModel)]="form.shippingCity" required placeholder="Madrid" />

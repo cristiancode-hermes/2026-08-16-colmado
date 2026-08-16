@@ -119,7 +119,7 @@ export class SeedService implements OnModuleInit {
         description: 'Tomate de la huerta cocinado a fuego lento con aceite de oliva.',
         priceCents: 285,
         stock: 18,
-        imageUrl: 'https://images.unsplash.com/photo-1546470427-e26264be5b0d?w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=800&q=80',
       },
       {
         categoryId: panaderia.id,
@@ -193,7 +193,7 @@ export class SeedService implements OnModuleInit {
         description: 'Papel absorbente de doble hoja.',
         priceCents: 185,
         stock: 22,
-        imageUrl: 'https://images.unsplash.com/photo-1605625848532-044b8d392ced?w=800&q=80',
+        imageUrl: 'https://live.staticflickr.com/7347/14164028844_1b8c1008f6_b.jpg',
       },
       {
         categoryId: hogar.id,
@@ -209,7 +209,7 @@ export class SeedService implements OnModuleInit {
         description: 'Velas de vainilla para tardes de sofá.',
         priceCents: 380,
         stock: 6,
-        imageUrl: 'https://images.unsplash.com/photo-1602874801006-26c4c5f8a4c4?w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=800&q=80',
       },
       // Inactivo — no visible en catálogo
       {

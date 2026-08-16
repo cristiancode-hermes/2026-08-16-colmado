@@ -23,7 +23,7 @@ import { CartService } from '../services/cart.service';
           }
         </nav>
 
-        <div style="display:flex;align-items:center;gap:8px">
+        <div class="navbar-actions">
           <a class="cart-btn" routerLink="/carrito" aria-label="Ver carrito">
             🛒
             @if (cartService.cart()?.itemCount) {
@@ -34,10 +34,12 @@ import { CartService } from '../services/cart.service';
             {{ isDark() ? '☀️' : '🌙' }}
           </button>
           @if (auth.user()) {
-            <a class="nav-link" routerLink="/pedidos">
-              Hola, {{ (auth.user()?.name ?? '').split(' ')[0] }}
-            </a>
-            <button class="btn btn-ghost" (click)="logout()">Salir</button>
+            <span class="navbar-user">
+              <a class="nav-link user-name" routerLink="/pedidos">
+                Hola, {{ (auth.user()?.name ?? '').split(' ')[0] }}
+              </a>
+              <button class="btn btn-ghost" (click)="logout()">Salir</button>
+            </span>
           } @else {
             <a class="nav-link" routerLink="/login" routerLinkActive="active">Entrar</a>
           }
@@ -56,9 +58,8 @@ export class Navbar implements OnInit {
     if (this.auth.token()) {
       void this.auth.refresh();
       void this.cartService.refresh().catch(() => undefined);
-    } else {
-      void this.cartService.refresh().catch(() => undefined);
     }
+    // Sin sesión no hay carrito en servidor: no llamar a /api/cart (evita 401 en consola).
   }
 
   toggleTheme(): void {

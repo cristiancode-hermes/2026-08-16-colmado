@@ -10,6 +10,10 @@ export class AuthService {
   readonly isAdmin = computed(() => this.user()?.role === 'admin');
   readonly token = signal<string | null>(localStorage.getItem('colmado_token'));
 
+  private resolveReady!: () => void;
+  /** Resuelve cuando termina el primer intento de restaurar la sesión (token válido → /auth/me; sin token o usuario cacheado → inmediato). */
+  readonly ready: Promise<void> = new Promise((r) => (this.resolveReady = r));
+
   constructor(private readonly api: ApiService) {
     const cached = localStorage.getItem('colmado_user');
     if (cached) {
@@ -18,6 +22,12 @@ export class AuthService {
       } catch {
         localStorage.removeItem('colmado_user');
       }
+    }
+    if (this.token() && !this.user()) {
+      // token sin usuario cacheado: restaurar antes de que los guards decidan
+      void this.refresh().finally(() => this.resolveReady());
+    } else {
+      this.resolveReady();
     }
   }
 
