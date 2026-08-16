@@ -11,6 +11,12 @@ export interface AdminStats {
     avgTicketCents: number;
     totalOrders: number;
   };
+  // Campos planos consumidos por el frontend (AdminStats del web)
+  products: number;
+  ordersToday: number;
+  pendingHolds: number;
+  revenueCents: number;
+  lowStock: number;
   salesByDay: { date: string; totalCents: number; orders: number }[];
   topProducts: { name: string; units: number; totalCents: number }[];
 }
@@ -72,6 +78,30 @@ export class AdminService {
 
     const totalOrders = await this.orders.count();
 
+    // KPIs planos para el frontend
+    const productsCount = await this.products
+      .createQueryBuilder('p')
+      .where('p.isActive = :active', { active: true })
+      .getCount();
+    const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const ordersToday = await this.orders
+      .createQueryBuilder('o')
+      .select('COUNT(*)', 'count')
+      .where('o.createdAt >= :dayStart', { dayStart })
+      .getRawOne<{ count: string }>();
+    const pendingHolds = await this.orders
+      .createQueryBuilder('o')
+      .select('COUNT(*)', 'count')
+      .where("o.status = 'pending'")
+      .getRawOne<{ count: string }>();
+    const revenueAll = await this.orderItems
+      .createQueryBuilder('oi')
+      .innerJoin(Order, 'o', 'o.id = oi.orderId AND o.status IN (:...statuses)', {
+        statuses: SALE_STATUSES,
+      })
+      .select('COALESCE(SUM(oi.subtotalCents), 0)', 'total')
+      .getRawOne<{ total: string }>();
+
     // Ventas por día — últimos 14 días con COALESCE (días sin ventas = 0)
     const salesByDay: { date: string; totalCents: number; orders: number }[] = [];
     for (let i = 13; i >= 0; i--) {
@@ -116,6 +146,12 @@ export class AdminService {
         avgTicketCents: Math.round(Number(avg?.avg ?? 0)),
         totalOrders,
       },
+      // KPIs planos para el frontend
+      products: productsCount,
+      ordersToday: Number(ordersToday?.count ?? 0),
+      pendingHolds: Number(pendingHolds?.count ?? 0),
+      revenueCents: Number(revenueAll?.total ?? 0),
+      lowStock: Number(lowStock?.count ?? 0),
       salesByDay,
       topProducts: top.map((t) => ({
         name: t.name,

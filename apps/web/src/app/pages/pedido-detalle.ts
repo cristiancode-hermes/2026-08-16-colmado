@@ -1,6 +1,7 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { OrdersService } from '../services/orders.service';
 import { StatusBadge } from '../components/shared';
 import { centsToEur, Order, ORDER_FLOW, ORDER_STATUS_LABELS } from '../models';
@@ -76,7 +77,7 @@ import { centsToEur, Order, ORDER_FLOW, ORDER_STATUS_LABELS } from '../models';
         @if (invoice(); as inv) {
           <h2 style="margin:32px 0 16px">Factura con QR</h2>
           <div class="card" style="padding:24px;display:flex;gap:24px;align-items:center;flex-wrap:wrap">
-            <div [innerHTML]="inv.qrSvg" style="width:180px"></div>
+            <div class="qr-box" [innerHTML]="qrHtml()"></div>
             <div>
               <p><strong>Factura nº:</strong> {{ inv.invoiceNumber }}</p>
               <p style="color:var(--muted);font-size:0.875rem;max-width:40ch">Presenta este QR en el mostrador del colmado para recoger tu pedido.</p>
@@ -98,6 +99,11 @@ export class PedidoDetallePage implements OnInit {
   readonly order = signal<Order | null>(null);
   readonly invoice = signal<{ qrSvg: string; invoiceNumber: string } | null>(null);
   readonly labels = ORDER_STATUS_LABELS;
+  private readonly sanitizer = inject(DomSanitizer);
+  readonly qrHtml = computed<SafeHtml | null>(() => {
+    const inv = this.invoice();
+    return inv ? this.sanitizer.bypassSecurityTrustHtml(inv.qrSvg) : null;
+  });
 
   ngOnInit(): void {
     void this.ordersService

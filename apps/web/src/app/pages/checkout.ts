@@ -18,12 +18,12 @@ import { centsToEur, CheckoutResult } from '../models';
       @if (hold(); as hold) {
         <div class="hold-banner" style="margin-bottom:24px">
           <span>⏱️ Reservamos tu compra</span>
-          <span class="hold-timer" style="margin-left:auto">{{ mmss }}</span>
+          <span class="hold-timer" style="margin-left:auto">{{ mmss() }}</span>
         </div>
         <div class="hold-progress" style="margin-bottom:24px">
-          <div class="hold-progress-bar" [style.transform]="'scaleX(' + progress + ')'"></div>
+          <div class="hold-progress-bar" [style.transform]="'scaleX(' + progress() + ')'"></div>
         </div>
-        <div class="alert alert-error" *ngIf="expired">⏰ El tiempo de reserva se agotó. Vuelve a tramitar el pedido para regenerar la retención.</div>
+        <div class="alert alert-error" *ngIf="expired()">⏰ El tiempo de reserva se agotó. Vuelve a tramitar el pedido para regenerar la retención.</div>
 
         <div class="card" style="padding:24px;margin-bottom:16px">
           <h3 style="margin-bottom:16px">📦 Pedido {{ hold.order.number }} — {{ centsToEur(hold.order.totalCents) }}</h3>
@@ -39,10 +39,10 @@ import { centsToEur, CheckoutResult } from '../models';
         </div>
 
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <button class="btn btn-primary" [disabled]="paying() || expired" (click)="pay()">
+          <button class="btn btn-primary" [disabled]="paying() || expired()" (click)="pay()">
             {{ paying() ? 'Procesando…' : '💳 Pagar ahora' }}
           </button>
-          <button class="btn btn-secondary" [disabled]="paying() || expired" (click)="cancel()">Cancelar pedido</button>
+          <button class="btn btn-secondary" [disabled]="paying() || expired()" (click)="cancel()">Cancelar pedido</button>
         </div>
         <p style="color:var(--muted);font-size:0.875rem;margin-top:12px">
           Pago simulado (demo) — al confirmar recibirás tu factura con código QR.

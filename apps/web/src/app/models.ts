@@ -103,6 +103,7 @@ export interface Order {
   expiresAt: string | null;
   paidAt: string | null;
   createdAt: string;
+  itemsCount?: number;
   items?: OrderItemDTO[];
   timeline?: TimelineEvent[];
 }
@@ -141,6 +142,8 @@ export interface AdminStats {
   revenueCents: number;
   lowStock: number;
   byStatus: Record<string, number>;
+  salesByDay: { date: string; totalCents: number; orders: number }[];
+  topProducts: { name: string; units: number; totalCents: number }[];
 }
 
 export function centsToEur(cents: number): string {

@@ -69,10 +69,20 @@ export class OrdersService {
   ) {}
 
   async listForUser(userId: string): Promise<Order[]> {
-    return this.orders.find({
+    const orders = await this.orders.find({
       where: { userId },
       order: { createdAt: 'DESC' },
     });
+    // itemCount para la lista (mismo contrato que admin.listOrders)
+    for (const o of orders) {
+      const count = await this.orderItems
+        .createQueryBuilder('oi')
+        .select('COALESCE(SUM(oi.quantity), 0)', 'count')
+        .where('oi.orderId = :id', { id: o.id })
+        .getRawOne<{ count: string }>();
+      (o as any).itemsCount = Number(count?.count ?? 0);
+    }
+    return orders;
   }
 
   async findForUser(userId: string, id: string): Promise<Order> {

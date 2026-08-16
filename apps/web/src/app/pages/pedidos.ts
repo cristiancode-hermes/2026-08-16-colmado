@@ -37,7 +37,7 @@ import { centsToEur, Order, ORDER_STATUS_LABELS } from '../models';
               </div>
             </div>
             <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:0.9375rem">
-              <span>{{ (o.items || []).reduce((n, i) => n + i.quantity, 0) }} artículo(s)</span>
+              <span>{{ o.itemsCount ?? 0 }} artículo(s)</span>
               <strong style="color:var(--ink);font-variant-numeric:tabular-nums">{{ eur(o.totalCents) }}</strong>
             </div>
           </div>
