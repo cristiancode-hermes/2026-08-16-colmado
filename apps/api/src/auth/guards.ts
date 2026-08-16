@@ -6,9 +6,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {}
 
 @Injectable()
 export class AdminGuard extends AuthGuard('jwt') {
-  canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext) {
+    // PRIMERO ejecutar passport (popula req.user), luego comprobar el rol
+    const ok = await super.canActivate(context);
+    if (!ok) return false;
     const req = context.switchToHttp().getRequest();
-    if (req.user && req.user.role === 'admin') return true;
-    return false;
+    return !!(req.user && req.user.role === 'admin');
   }
 }

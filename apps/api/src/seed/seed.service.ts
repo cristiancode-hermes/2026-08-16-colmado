@@ -126,7 +126,7 @@ export class SeedService implements OnModuleInit {
         name: 'Pan de pueblo (barra)',
         description: 'Masa madre, horneado cada mañana. Corteza crujiente y miga esponjosa.',
         priceCents: 150,
-        stock: 1,
+        stock: 3,
         imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80',
       },
       {
@@ -312,6 +312,8 @@ export class SeedService implements OnModuleInit {
     await this.orderItems.save([
       { orderId: o3.id, productId: pan.id, productName: pan.name, unitPriceCents: 150, quantity: 1, subtotalCents: 150 },
     ] as any);
+    pan.stock = pan.stock - 1;
+    await this.products.save(pan as any);
 
     // Pedido 4: pending ACTIVO — expira en +10 min (contador)
     const o4 = (await this.orders.save({
