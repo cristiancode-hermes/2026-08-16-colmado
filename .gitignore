@@ -1,0 +1,11 @@
+# deps
+node_modules/
+dist/
+data/
+*.db
+*.tsbuildinfo
+# logs
+*.log
+# env
+.env
+.env.local
